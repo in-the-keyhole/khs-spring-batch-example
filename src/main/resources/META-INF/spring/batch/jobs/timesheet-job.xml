@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans 
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns="http://www.springframework.org/schema/batch" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<beans:description>Import Timesheets and Create Invoices.</beans:description>
+
+	<context:component-scan base-package="com.khs"/>
+
+	<job id="TimesheetInvoicing" restartable="true">
+		<step id="importTimesheets" next="invoiceDetail">
+			<tasklet transaction-manager="txManager" >
+				<chunk reader="timesheetFileItemReader" 							      
+				       writer="timesheetWriter" 
+				       commit-interval="1">
+				</chunk>
+			</tasklet>
+		</step>	
+		<step id="invoiceDetail" next="outputPdfReport">
+			<tasklet transaction-manager="txManager" >
+				<chunk reader="timesheetReader" 	
+					   processor="createInvoice"			      
+				       writer="writeInvoice" 
+				       commit-interval="1">
+				</chunk>
+			</tasklet>
+		</step>		
+		<step id="outputPdfReport">
+			<tasklet transaction-manager="txManager" >
+				<chunk reader="timesheetReportReader"
+					   processor="timesheetReportProcessor" 				      
+				       writer="timesheetReportWriter" 
+				       commit-interval="1">
+				</chunk>
+			</tasklet>
+		</step>
+	</job>
+	
+
+	
+	<beans:bean id="reportReader" class="com.khs.batch.timesheet.TimesheetReader"/>
+	
+	<beans:bean id="reportWriter" class="com.khs.batch.timesheet.TimesheetWriter"/>
+	
+	<beans:bean id="createInvoice" class="com.khs.batch.timesheet.InvoiceProcessor"/>
+
+	<beans:bean id="timesheetWriter" class="com.khs.batch.timesheet.TimesheetWriter"/>
+	
+	<beans:bean id="writeInvoice" class="com.khs.batch.timesheet.InvoiceWriter"/>
+
+	<beans:bean id="timesheetReader" class="org.springframework.batch.item.database.JpaPagingItemReader">
+    	<beans:property name="entityManagerFactory" ref="dataFactory"/>
+   		 <beans:property name="queryString" value="select t from Timesheet t"/>
+    	<beans:property name="pageSize" value="1000"/>
+	</beans:bean>
+	
+			
+		<beans:bean id="timesheetFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+				<beans:property name="resource" value="classpath:data/input/timesheets.input" />
+				<beans:property name="lineMapper">
+					<beans:bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+						<beans:property name="lineTokenizer">
+							<beans:bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+								<beans:property name="names" value="week,company,monday,tuesday,wednesday,thursday,friday,saturday,sunday" />
+							</beans:bean>
+						</beans:property>
+						<beans:property name="fieldSetMapper">
+							<beans:bean class="com.khs.batch.timesheet.TimesheetFieldSetMapper" />
+						</beans:property>
+					</beans:bean>
+				</beans:property>
+			</beans:bean>
+
+
+	<!-- Configuration for Timesheet Reports Job -->
+	<beans:bean id="timesheetReportReader" class="com.khs.batch.timesheet.TimesheetReportReader" />     
+
+	<beans:bean id="timesheetReportProcessor" class="com.khs.batch.report.ReportProcessor">  
+	   <beans:property name="factory" ref="timesheetReportFactory" />
+	</beans:bean>
+
+    <beans:bean id="timesheetReportFactory" class="com.khs.batch.timesheet.ExampleTimesheetReportFactory" />
+ 
+     <beans:bean id="timesheetReportWriter" class="com.khs.batch.report.ReportPDFWriter"> 
+         <beans:property name="resource" ref="outputResource"/>   <!-- value="file:/timesheet-batch-report.pdf" /> -->  
+         <beans:property name="width" value="60"/> 
+         <beans:property name="headingWidth" value="60" />
+	</beans:bean>
+
+<beans:bean id="outputResource" class="org.springframework.core.io.FileSystemResource">
+		<beans:constructor-arg value="timesheet-batch-report.pdf" />	
+	</beans:bean>
+     
+     
+
+	
+</beans:beans>

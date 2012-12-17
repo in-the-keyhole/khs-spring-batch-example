@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans 
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns="http://www.springframework.org/schema/batch" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<beans:description>Export Invoice Items to xml</beans:description>
+
+	<context:component-scan base-package="com.khs"/>
+
+	<job id="InvoiceExport" restartable="true">
+		<step id="readInvoices">
+			<tasklet transaction-manager="txManager" >
+				<chunk reader="invoiceReader" 							      
+				       writer="invoiceWriter" 
+				       commit-interval="1">
+				</chunk>
+			</tasklet>
+		</step>	
+		
+	</job>
+	
+
+	<beans:bean id="invoiceReader" class="org.springframework.batch.item.database.JpaPagingItemReader">
+    	<beans:property name="entityManagerFactory" ref="dataFactory"/>
+   		 <beans:property name="queryString" value="select i from InvoiceItem i"/>
+    	<beans:property name="pageSize" value="1000"/>
+	</beans:bean>
+	
+			
+	<beans:bean id="invoiceWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
+		<beans:property name="resource" ref="outputResource" />
+		<beans:property name="shouldDeleteIfExists" value="true" />
+		<beans:property name="lineAggregator">
+			<beans:bean
+				class="org.springframework.batch.item.file.transform.FormatterLineAggregator">
+				<beans:property name="fieldExtractor">
+					<beans:bean
+						class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+						<beans:property name="names" value="company,amount" />
+					</beans:bean>
+				</beans:property>
+				<beans:property name="format" value="%-9s%-2.2f" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+	
+	<beans:bean id="outputResource" class="org.springframework.core.io.FileSystemResource">
+		<beans:constructor-arg value="invoice-export.sdf" />	
+	</beans:bean>
+	
+	
+	
+
+	
+</beans:beans>

@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>khs-spring-batch-example</groupId>
+  <artifactId>khs-spring-batch-example</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  
+  
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.springframework.batch</groupId>
+        <artifactId>spring-batch-admin-manager</artifactId>
+        <version>1.2.1.RELEASE</version>
+	</dependency>
+    
+    	<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>1.8.0.10</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+    
+    	
+        <dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>3.3.1.GA</version>
+			
+			<exclusions>
+				<exclusion>
+					<artifactId>ehcache</artifactId>
+					<groupId>net.sf.ehcache</groupId>
+				</exclusion>
+			</exclusions>	
+			
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.3.2.GA</version>
+			
+			<exclusions>
+				<exclusion>
+					<artifactId>ehcache</artifactId>
+					<groupId>net.sf.ehcache</groupId>
+				</exclusion>
+			</exclusions>	
+			
+			
+		</dependency>
+     	
+     	
+     	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>3.0.5.RELEASE</version>
+		</dependency>
+     	
+     	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>3.0.5.RELEASE</version>
+		</dependency>
+     	
+     	<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+		</dependency>
+     
+     	<dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+        </dependency>
+        
+     	<dependency>
+		   	<groupId>com.keyholesoftware</groupId>
+		   	<artifactId>khs-spring-batch-reporting</artifactId>
+		   	<version>1.0</version>
+   		</dependency>
+     
+     
+  </dependencies>
+  
+  
+  
+  
+  
+  
+</project>
