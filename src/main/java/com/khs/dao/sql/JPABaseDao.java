@@ -1,5 +1,11 @@
 package com.khs.dao.sql;
 
+/**
+ * Base JPA DAO implementation
+ * 
+ * @author dpitt www.keyholesoftware.com
+ */
+
 import java.util.List;
 
 import javax.persistence.Query;

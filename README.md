@@ -1,15 +1,16 @@
 khs-spring-batch-example
 ========================
 
-Example Spring Batch Example jobs with admin console
+Example Spring Batch Example jobs with admin console to launch and manage
 
-This example implements the following two jobs that read and write from flat files and an in memory
+This example implements the following two jobs that read/write flat files and an in memory
 (HSQL) relational database.
 
-Example Jobs 
-------------
+Example Jobs (time sheet import,invoice,and PDF output)
+-------------------------------------------------------
 
-Time sheet invoicing Job Steps:
+Job Configuration location
+MET-INF/spring/batch/jobs/timesheet-job.xml
 	
 	Step 1
 	
@@ -30,6 +31,8 @@ Time sheet invoicing Job Steps:
 
 Getting Started
 ---------------
+Project is in a Maven WAR format
+
 To build it clone then use Maven:
 
     $ git clone ...

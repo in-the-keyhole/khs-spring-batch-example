@@ -1,5 +1,11 @@
 package com.khs.batch.timesheet;
 
+/**
+ * Timesheet reader implementation
+ * 
+ * @author dpitt www.keyholesoftware.com
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
