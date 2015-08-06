@@ -41,5 +41,10 @@ To build it clone then use Maven:
 	Compile and build WAR
 	$ mvn clean package
 	
+	or 
+	
+	Import into STS Eclipse and configure as a Maven Project
+	
+	
 	Deploy war to app server, start and access with...
 	http://localhost:8080/khs-spring-batch-example
