@@ -14,7 +14,6 @@ import com.khs.batch.model.Timesheet;
 
 public class InvoiceProcessor implements ItemProcessor<Timesheet, InvoiceItem> {
 
-	@Override
 	public InvoiceItem process(Timesheet ts) throws Exception {
 
 		InvoiceItem item = new InvoiceItem();

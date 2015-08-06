@@ -13,7 +13,7 @@ public class InvoiceWriter implements ItemWriter<InvoiceItem> {
 	@Autowired
 	InvoiceJPADao dao;
 
-	@Override
+
 	public void write(List<? extends InvoiceItem> items) throws Exception {
 
 		for (InvoiceItem invoice : items) {

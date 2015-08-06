@@ -53,7 +53,7 @@
 	</beans:bean>
 	
 	<beans:bean id="outputResource" class="org.springframework.core.io.FileSystemResource">
-		<beans:constructor-arg value="invoice-export.sdf" />	
+		<beans:constructor-arg value="/uses/dpitt/invoice-export.sdf" />	
 	</beans:bean>
 	
 	
