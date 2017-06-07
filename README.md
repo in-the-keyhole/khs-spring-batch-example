@@ -31,12 +31,31 @@ MET-INF/spring/batch/jobs/timesheet-job.xml
 
 Getting Started
 ---------------
+Clone and build prerequisite project khs-spring-batch-report-writer
+	
+	$ git clone https://github.com/in-the-keyhole/khs-spring-batch-report-writer.git
+	$ cd khs-spring-batch-report-writer
+	
+	Compile and install
+	$ mvn clean install -U
+	
 Project is in a Maven WAR format
 
-To build it clone then use Maven:
+Clone project:
 
     $ git clone ...
 	$ cd khs-spring-batch-example
+	
+Update Invoice-export job output:
+	
+	Open invoice-export-job.xml file in preferred editor.
+	Update section:
+		<beans:bean id="outputResource" class="org.springframework.core.io.FileSystemResource">
+			<beans:constructor-arg value="/uses/dpitt/invoice-export.sdf" />	
+		</beans:bean>
+		
+		The value "/uses/dpitt/invoice-export.sdf" represents where the job will output the invoice-export.sdf file.  
+		Update the value with a location on your local file system, for example: "/MyDocuments/springBatchExample/invoice-export.sdf".
 	
 	Compile and build WAR
 	$ mvn clean package
