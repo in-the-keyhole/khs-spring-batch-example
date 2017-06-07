@@ -46,7 +46,7 @@ Clone project:
     $ git clone ...
 	$ cd khs-spring-batch-example
 	
-Update Invoice-export job output:
+Update Invoice-export job output and build project with Maven:
 	
 	Open invoice-export-job.xml file in preferred editor.
 	Update section:
